@@ -25,7 +25,7 @@ rayon = { version = "1.5.3", optional = true }
 # not part of the stable interface of this crate.
 rustc-rayon = { package = "rustc-rayon", version = "0.5", optional = true }
 
-allocative = { path = "../allocative/allocative", optional = true }
+allocative = { git = "https://github.com/JustusAdam/allocative", rev = "f93888c2dc9d9898481242297c14f70792f0eef2", optional = true }
 
 [dependencies.hashbrown]
 version = "0.14.1"
