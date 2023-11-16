@@ -78,10 +78,14 @@ use crate::{Bucket, Entries, Equivalent, HashValue, TryReserveError};
 /// assert_eq!(letters.get(&'y'), None);
 /// ```
 #[cfg(feature = "std")]
+#[cfg_attr(feature = "profiling", derive(allocative::Allocative))]
+#[cfg_attr(feature = "profiling", allocative(bound = "K: allocative::Allocative, V: allocative::Allocative, S"))]
 pub struct IndexMap<K, V, S = RandomState> {
     pub(crate) core: IndexMapCore<K, V>,
+    #[cfg_attr(feature = "profiling", allocative(skip))]
     hash_builder: S,
 }
+
 #[cfg(not(feature = "std"))]
 pub struct IndexMap<K, V, S> {
     pub(crate) core: IndexMapCore<K, V>,

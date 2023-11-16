@@ -141,6 +141,7 @@ pub use equivalent::Equivalent;
 
 // shared private items
 
+#[cfg_attr(feature = "profiling", derive(allocative::Allocative))]
 /// Hash value newtype. Not larger than usize, since anything larger
 /// isn't used for selecting position anyway.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -153,6 +154,7 @@ impl HashValue {
     }
 }
 
+#[cfg_attr(feature = "profiling", derive(allocative::Allocative))]
 #[derive(Copy, Debug)]
 struct Bucket<K, V> {
     hash: HashValue,

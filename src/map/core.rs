@@ -20,12 +20,29 @@ use core::ops::RangeBounds;
 use crate::util::simplify_range;
 use crate::{Bucket, Entries, Equivalent, HashValue};
 
+#[cfg_attr(feature = "profiling", derive(allocative::Allocative))]
 /// Core of the map that does not depend on S
 pub(crate) struct IndexMapCore<K, V> {
+    #[cfg_attr(feature = "profiling", allocative(visit = visit_indices))]
     /// indices mapping from the entry hash to its index.
     indices: RawTable<usize>,
     /// entries is a dense vec of entries in their order.
     entries: Vec<Bucket<K, V>>,
+}
+
+#[cfg(feature = "profiling")]
+fn visit_indices(table: &RawTable<usize>, visitor: &mut allocative::Visitor<'_>) {
+    let mut vis = visitor.enter_self_sized::<RawTable<usize>>();
+    vis.visit_simple(
+        allocative::ident_key!(elements),
+        table.len() * std::mem::size_of::<usize>(),
+    );
+    vis.visit_simple(
+        allocative::ident_key!(unused_capacity),
+        (table.len() - table.capacity()) * std::mem::size_of::<usize>(),
+    );
+    vis.exit()
+
 }
 
 #[inline(always)]
